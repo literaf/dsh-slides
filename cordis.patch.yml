@@ -1,0 +1,12 @@
+# dsh-slides bundle layer: one row mounting the deck renderer.
+#
+# Override any field from the profile's own cordis.patch.yml (a patch replaces
+# the whole `config`, so restate every key you keep):
+#
+#   - id: slides
+#     config:
+#       outputDir: talks/
+#       defaultTheme: ink
+- insert:
+    - id: slides
+      name: dsh-slides
