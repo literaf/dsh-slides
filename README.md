@@ -87,13 +87,13 @@ The bundle inserts one row (`id: slides`). Override it from your profile's `cord
 
 ## Notes
 
-- Decks are written through `ctx.fs`, never `node:fs`, so a sandboxing filesystem backend fences the write like any other tool. The tool is therefore registered **only where a filesystem provider is composed** — with none, neither the tool nor its guidance appears, instead of offering a call that always fails.
+- Decks are written through `ctx.fs`, so a sandboxing filesystem backend fences the write like any other tool. The tool is therefore registered **only where a filesystem provider is composed** — with none, neither the tool nor its guidance appears, instead of offering a call that always fails.
 - Images are yours to supply. A `data:` URI keeps the deck self-contained; an `https` URL works but makes the deck depend on that host at presentation time.
 - This package renders decks and knows nothing about where the content came from. Packages that do — `dsh-paper-slides` for academic talks — compose beside it and drive `make_slides`.
 
 ## Known limitations
 
-- **No `.pptx` export.** The harness filesystem capability exposes text writes only, and writing a binary any other way would go around the sandbox policy that fences every other tool. Print to PDF meanwhile; the export lands when there is a sanctioned seam for it.
+- **No `.pptx` export yet.** 0.1.0 writes HTML only. The export is planned, and the route is known: `ctx.fs.resolve` lets the filesystem backend decide whether and where the path is allowed, `processPath` returns the resolved location, and the bytes are written there — so containment is still decided by the sandbox rather than around it. Print to PDF meanwhile.
 - **No incremental reveal.** A slide appears whole. Builds and transitions are the kind of thing that reads as generated when an agent picks them.
 
 ## License

@@ -15,4 +15,4 @@ All notable changes to `dsh-slides` are recorded here. The format follows [Keep 
 
 ### Notes
 - Decks are written through `ctx.fs`, never `node:fs`, so a sandboxing filesystem backend fences the write. The tool and its guidance are therefore registered only where a filesystem provider is composed.
-- No `.pptx` export: the filesystem capability exposes text writes only, and writing a binary another way would bypass the sandbox policy that fences every other tool.
+- No `.pptx` export in this release. It is planned: `ctx.fs.resolve` has the backend decide whether a path is allowed, `processPath` returns the resolved location, and the bytes go there — containment stays with the sandbox.
