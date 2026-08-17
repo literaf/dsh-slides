@@ -2,6 +2,19 @@
 
 All notable changes to `dsh-slides` are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/) (0.x: minor bumps may change the deck model).
 
+## [0.2.0] - 2026-08-17
+
+### Added
+- `.pptx` export. `formats` selects what `make_slides` writes (`["html"]` by default); ask for `["html", "pptx"]` and an editable PowerPoint file lands beside the HTML deck, carrying the theme's colours and faces, the bullets, and the speaker notes.
+- `parseInline` splits a bullet's `**bold**` / `*italic*` / `` `code` `` into runs once, and both renderers work from those runs — so the HTML deck and the pptx can never disagree about what is bold.
+
+### Changed
+- The tool result now reports a `files` array rather than one path, because a call can write more than one file.
+- Bullets are emitted as paragraphs of a single pptx text box instead of one box each, which keeps the line spacing uniform and lets a long bullet reflow.
+
+### Notes
+- The pptx write asks for its path through the sanctioned `ctx.fs.writeText` before any bytes exist, so a sandboxing backend applies its real policy and can refuse with `FS_SANDBOX_DENIED` first. `resolve` is not a fenced operation, so resolving and writing directly would have gone around the fence.
+
 ## [0.1.0] - 2026-08-17
 
 ### Added

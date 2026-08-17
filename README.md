@@ -6,7 +6,7 @@ English | [中文](README_CN.md)
 
 [![npm](https://img.shields.io/npm/v/dsh-slides?label=npm)](https://www.npmjs.com/package/dsh-slides) [![CI](https://github.com/literaf/dsh-slides/actions/workflows/ci.yml/badge.svg)](https://github.com/literaf/dsh-slides/actions/workflows/ci.yml) [![dsh-plugin](https://img.shields.io/badge/topic-dsh--plugin-blue)](https://github.com/topics/dsh-plugin) ![license](https://img.shields.io/badge/license-MIT-green)
 
-Give the agent a `make_slides` tool and it writes a talk to **one HTML file** — opens in any browser, presents fullscreen, keeps your speaker notes off the screen, and prints to PDF with Ctrl+P.
+Give the agent a `make_slides` tool and it writes a talk to **one self-contained HTML file** — opens in any browser, presents fullscreen, keeps your speaker notes off the screen, and prints to PDF with Ctrl+P. Ask for `formats: ["html", "pptx"]` and it writes an editable PowerPoint file alongside it, speaker notes included.
 
 The file loads nothing at presentation time. No CDN, no webfont, no image host. A deck that needs the network is a deck that can fail in the room you are presenting in.
 
@@ -38,6 +38,20 @@ Omit `layout` and it is inferred from the fields you filled in.
 Every slide takes `notes` — the speaker notes. They never appear on the slide; the presenter reveals them with `S` during the talk. This is the point of the tool: the claim goes on the slide, the talking goes in the notes, and the agent is told so in its guidance.
 
 Bullets support `**bold**`, `*italic*` and `` `code` ``. Everything is escaped before formatting is applied, so content can never inject markup into the deck.
+
+## Formats
+
+`formats` defaults to `["html"]`. Add `"pptx"` when the deck has to be edited by a co-author or uploaded to a conference system:
+
+| | HTML | PPTX |
+|---|---|---|
+| Presents offline | Yes, nothing is fetched | Yes |
+| Speaker notes | `S` during the talk | In PowerPoint's notes pane |
+| Prints to PDF | Ctrl+P, one slide per page | Through PowerPoint |
+| Editable by a co-author | Not really | Yes |
+| Images | Embed as `data:` URIs to stay self-contained | `data:` URIs are embedded; URLs stay links |
+
+Both come from the same deck and the same inline-markup parse, so they cannot drift apart.
 
 ## Presenting
 
@@ -88,13 +102,14 @@ The bundle inserts one row (`id: slides`). Override it from your profile's `cord
 ## Notes
 
 - Decks are written through `ctx.fs`, so a sandboxing filesystem backend fences the write like any other tool. The tool is therefore registered **only where a filesystem provider is composed** — with none, neither the tool nor its guidance appears, instead of offering a call that always fails.
+- `ctx.fs` exposes text writes only, and a sandboxing backend fences exactly those. So the pptx write asks for the path through the sanctioned `writeText` first: the backend applies its real policy and refuses with `FS_SANDBOX_DENIED` before any bytes exist, and only a path it allowed is then filled in. Resolving a path and writing to it directly would go around the fence, because `resolve` is not one of the fenced operations.
 - Images are yours to supply. A `data:` URI keeps the deck self-contained; an `https` URL works but makes the deck depend on that host at presentation time.
 - This package renders decks and knows nothing about where the content came from. Packages that do — `dsh-paper-slides` for academic talks — compose beside it and drive `make_slides`.
 
 ## Known limitations
 
-- **No `.pptx` export yet.** 0.1.0 writes HTML only. The export is planned, and the route is known: `ctx.fs.resolve` lets the filesystem backend decide whether and where the path is allowed, `processPath` returns the resolved location, and the bytes are written there — so containment is still decided by the sandbox rather than around it. Print to PDF meanwhile.
 - **No incremental reveal.** A slide appears whole. Builds and transitions are the kind of thing that reads as generated when an agent picks them.
+- **The pptx is a clean deck, not a designed one.** It carries your content, theme colours, fonts, bullets and notes into PowerPoint; it does not reproduce the HTML deck pixel for pixel, and it uses no master slides or animations.
 
 ## License
 
