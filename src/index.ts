@@ -18,13 +18,14 @@ import type { ThemeName } from './themes.js'
 import { applySlideTools } from './tools.js'
 import { buildGuidance } from './prompt.js'
 
-export { DeckError, SLIDE_LAYOUTS, escapeHtml, inferLayout, renderInline, slugify, validateDeck } from './deck.js'
-export type { DeckSpec, SlideLayout, SlideSpec } from './deck.js'
+export { DeckError, SLIDE_LAYOUTS, escapeHtml, inferLayout, parseInline, renderInline, slugify, validateDeck } from './deck.js'
+export type { DeckSpec, InlineRun, SlideLayout, SlideSpec } from './deck.js'
 export { THEMES, THEME_NAMES, resolveTheme } from './themes.js'
 export type { Theme, ThemeName } from './themes.js'
 export { renderDeckHtml } from './html.js'
-export { applySlideTools, deckPath, joinPath, themeCatalog } from './tools.js'
-export type { ToolOptions } from './tools.js'
+export { imageSource, renderDeckPptx } from './pptx.js'
+export { DECK_FORMATS, applySlideTools, deckPath, joinPath, themeCatalog } from './tools.js'
+export type { DeckFormat, ToolOptions } from './tools.js'
 export { buildGuidance } from './prompt.js'
 
 /** Cordis plugin name used by loader diagnostics. */

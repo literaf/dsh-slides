@@ -127,15 +127,61 @@ export function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;')
 }
 
+/** A stretch of text with the inline emphasis that applies to it. */
+export interface InlineRun {
+  /** The literal text. Never escaped or marked up — that is the renderer's job. */
+  readonly text: string
+  /** `**bold**`. */
+  readonly bold?: boolean
+  /** `*italic*`. */
+  readonly italic?: boolean
+  /** `` `code` ``. */
+  readonly code?: boolean
+}
+
+/** Code first, then bold, then italic — a `*` inside `**` must not open emphasis. */
+const INLINE = /`([^`]+)`|\*\*([^*]+)\*\*|\*([^*]+)\*/g
+
 /**
- * Render the inline markdown a bullet may carry: `**bold**`, `*italic*`,
- * `` `code` ``. Applied after escaping, so the source can never inject markup.
- * @param text - raw bullet or caption text.
+ * Split the inline markdown a bullet may carry into runs.
+ *
+ * Every renderer works from these runs rather than from its own parse, so the
+ * HTML deck and the pptx export can never disagree about what is bold.
+ * @param text - raw bullet, title or caption text.
+ * @returns the runs, in order; a single plain run when there is no markup.
+ */
+export function parseInline(text: string): InlineRun[] {
+  const runs: InlineRun[] = []
+  let cursor = 0
+  for (const match of text.matchAll(INLINE)) {
+    const start = match.index
+    if (start > cursor) runs.push({ text: text.slice(cursor, start) })
+    const [, code, bold, italic] = match
+    if (code !== undefined) runs.push({ text: code, code: true })
+    else if (bold !== undefined) runs.push({ text: bold, bold: true })
+    else if (italic !== undefined) runs.push({ text: italic, italic: true })
+    cursor = start + match[0].length
+  }
+  if (cursor < text.length) runs.push({ text: text.slice(cursor) })
+  return runs
+}
+
+/**
+ * Render inline markdown to HTML.
+ *
+ * Each run's text is escaped before its tags are added, so deck content can
+ * never inject markup.
+ * @param text - raw bullet, title or caption text.
  * @returns escaped HTML with the three inline forms applied.
  */
 export function renderInline(text: string): string {
-  return escapeHtml(text)
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
+  return parseInline(text)
+    .map((run) => {
+      const escaped = escapeHtml(run.text)
+      if (run.code === true) return `<code>${escaped}</code>`
+      if (run.bold === true) return `<strong>${escaped}</strong>`
+      if (run.italic === true) return `<em>${escaped}</em>`
+      return escaped
+    })
+    .join('')
 }
