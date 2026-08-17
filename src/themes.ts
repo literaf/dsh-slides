@@ -29,6 +29,16 @@ export interface Theme {
   readonly headingFont: string
   /** Font stack for body text. */
   readonly bodyFont: string
+  /**
+   * Single faces for the pptx export. PowerPoint takes one face per run, not
+   * a stack, and substitutes per script for CJK on its own.
+   */
+  readonly pptxFace: {
+    /** Face for headings. */
+    readonly heading: string
+    /** Face for body text. */
+    readonly body: string
+  }
 }
 
 const SANS = "'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif"
@@ -51,6 +61,7 @@ export const THEMES: Readonly<Record<ThemeName, Theme>> = {
     accent: '#2563eb',
     headingFont: SANS,
     bodyFont: SANS,
+    pptxFace: { heading: 'Arial', body: 'Arial' },
   },
   ink: {
     summary: 'Warm paper ground with a serif face. Reads like a printed paper; suits a seminar or a defense.',
@@ -61,6 +72,7 @@ export const THEMES: Readonly<Record<ThemeName, Theme>> = {
     accent: '#9a3412',
     headingFont: SERIF,
     bodyFont: SERIF,
+    pptxFace: { heading: 'Georgia', body: 'Georgia' },
   },
   midnight: {
     summary: 'Deep blue ground, light type. Holds up in a bright room where a white deck washes out.',
@@ -71,6 +83,7 @@ export const THEMES: Readonly<Record<ThemeName, Theme>> = {
     accent: '#38bdf8',
     headingFont: SANS,
     bodyFont: SANS,
+    pptxFace: { heading: 'Arial', body: 'Arial' },
   },
   slate: {
     summary: 'Neutral greys, no colour accent. For decks whose figures carry all the colour.',
@@ -81,6 +94,7 @@ export const THEMES: Readonly<Record<ThemeName, Theme>> = {
     accent: '#475569',
     headingFont: SANS,
     bodyFont: SANS,
+    pptxFace: { heading: 'Arial', body: 'Arial' },
   },
   sunrise: {
     summary: 'Off-white ground with a warm accent. A lighter register for a talk meant to persuade.',
@@ -91,6 +105,7 @@ export const THEMES: Readonly<Record<ThemeName, Theme>> = {
     accent: '#ea580c',
     headingFont: SANS,
     bodyFont: SERIF,
+    pptxFace: { heading: 'Arial', body: 'Georgia' },
   },
 }
 

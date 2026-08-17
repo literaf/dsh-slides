@@ -5,6 +5,7 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2023"],
     "types": ["node"],
+    "esModuleInterop": true,
     "strict": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,

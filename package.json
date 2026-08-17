@@ -1,7 +1,7 @@
 {
   "name": "dsh-slides",
-  "version": "0.1.0",
-  "description": "Turn a structured outline into a presentation for DeepSeek Harness (dsh): one self-contained HTML deck that opens in any browser, presents offline, shows speaker notes, and prints to PDF. Five committed themes.",
+  "version": "0.2.0",
+  "description": "Turn a structured outline into a presentation for DeepSeek Harness (dsh): a self-contained HTML deck that presents offline with speaker notes and prints to PDF, plus optional editable .pptx export. Five committed themes.",
   "type": "module",
   "license": "MIT",
   "author": "ai4scholar",
@@ -77,5 +77,8 @@
     "@types/node": "^22.20.0",
     "typescript": "^5.9.0",
     "vitest": "^4.1.8"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
   }
 }
