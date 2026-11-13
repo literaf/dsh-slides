@@ -1,11 +1,11 @@
 {
   "name": "dsh-slides",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Turn a structured outline into a presentation for DeepSeek Harness (dsh): a self-contained HTML deck that presents offline with speaker notes and prints to PDF, plus optional editable .pptx export. Five committed themes.",
   "type": "module",
   "license": "MIT",
   "author": "ai4scholar",
-  "homepage": "https://ai4scholar.net?src=dsh",
+  "homepage": "https://ai4scholar.net?src=dsh_slides",
   "repository": {
     "type": "git",
     "url": "https://github.com/literaf/dsh-slides.git"

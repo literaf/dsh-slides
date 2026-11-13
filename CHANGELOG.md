@@ -2,6 +2,11 @@
 
 All notable changes to `dsh-slides` are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/) (0.x: minor bumps may change the deck model).
 
+## [0.2.1] - 2026-11-13
+
+### Changed
+- The package homepage link to ai4scholar.net now carries `?src=dsh_slides` instead of `?src=dsh`, so website analytics can tell this package apart from other dsh sources. No code changes.
+
 ## [0.2.0] - 2026-08-17
 
 ### Added
